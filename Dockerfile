@@ -1,4 +1,4 @@
 FROM tomcat:9
 # Take the war and copy to webapps of tomcat
 COPY target/*.war /usr/local/tomcat/webapps/myweb.war
-EXPOSE 8080
+EXPOSE 9000
