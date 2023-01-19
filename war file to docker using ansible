@@ -1,0 +1,50 @@
+pipeline
+{
+    agent any
+    
+    environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    
+    stages{
+        stage("GitCheckout"){
+            steps{
+             git 'https://github.com/Vigneshkrishnan0001/my-app.git'   
+            }
+        }
+        stage("Maven Build")
+        {
+            steps{
+                sh "mvn clean package"
+            }
+        }
+        stage("Docker Build"){
+            steps{
+                
+              sh "docker build . -t kakarot0503/my-app:0.0.2"
+              
+            }
+        }
+    
+         stage("Push to dockerHub"){
+             steps{
+                 withCredentials([string(credentialsId: 'Docker-Hub', variable: 'DockerhubPwd')]) {
+                  sh "docker login -u kakarot0503 -p ${DockerhubPwd}"
+                 
+                 }
+                 
+                 sh "docker push kakarot0503/my-app:0.0.2"
+             }
+         }
+    
+         stage("deploy using ansible"){
+             steps{
+                 ansiblePlaybook credentialsId: 'test-docker', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'ansible-docker/inventory.yaml', playbook: 'ansible-docker/docker-dep.yaml'
+             }
+         }
+    }
+}
+              
+              
+              
+              
