@@ -2,7 +2,7 @@
 - hosts: dev
   gather_facts: false
   tasks:
-    - name: Create a Deployment for adjust task.
+    - name: Create a Deployment.
       k8s:
         state: present
         definition:
@@ -24,10 +24,10 @@
               spec:
                 containers:
                   - name: demo-app
-                    image: <image-name>
+                    image: kakarot0503/my-app:0.0.4
                     ports:
                       - containerPort: 8080
-    - name: Create a Service for adjust web server.
+    - name: Create a Service.
       k8s:
         state: present
         definition:
