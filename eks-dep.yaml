@@ -39,5 +39,5 @@ spec:
       targetPort: 8085
   type: LoadBalancer
   selector:
-    matchLabels:
-      app: my-app
+    app: my-app
+
