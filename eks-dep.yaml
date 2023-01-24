@@ -30,7 +30,6 @@ kind: Service
 metadata:
   labels:
     app: my-app
-    k8s-app: my-app
   name: my-app
 spec:
   ports:
