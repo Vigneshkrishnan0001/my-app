@@ -16,7 +16,7 @@ spec:
         app: my-app
     spec:
       containers:
-        - name: app
+        - name: my-app
           image: kakarot0503/my-app:0.0.3
           imagePullPolicy: Always
           ports:
