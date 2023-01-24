@@ -2,7 +2,18 @@
 - hosts: dev
   gather_facts: false
   tasks:
-    - name: Create a Deployment.
+    # Create namespace.
+    - name: Create namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: demo-app
+
+    # Create Kubernetes 
+    - name: Create a Deployment
       k8s:
         state: present
         definition:
@@ -10,6 +21,7 @@
           kind: Deployment
           metadata:
             name: demo-app
+            namespace: demo-app
             labels:
               app: demo-app
           spec:
@@ -26,8 +38,10 @@
                   - name: demo-app
                     image: kakarot0503/my-app:0.0.4
                     ports:
-                      - containerPort: 8080
-    - name: Create a Service.
+                    - containerPort: 8080
+
+
+    - name: Create a Service
       k8s:
         state: present
         definition:
@@ -35,6 +49,7 @@
           kind: Service
           metadata:
             name: demo-app
+            namespace: demo-app
           spec:
             selector:
               app: demo-app
