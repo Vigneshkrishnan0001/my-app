@@ -19,6 +19,10 @@
       pip:
         name: docker-py
         state: present
+    - name: stop the container
+      docker_container:
+        name: tomcat-app
+        state: absent
     - name: start the container 
       docker_container:
         name: tomcat-app
