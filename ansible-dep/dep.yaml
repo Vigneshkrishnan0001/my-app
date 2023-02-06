@@ -1,8 +1,6 @@
 ---
 - hosts: server
   become: True
-  vars_files:
-    - password.yaml
   tasks:
     - name: "Install PIP"
       apt: name=python3-pip state=present
@@ -17,7 +15,7 @@
         extension: war
         version: "{{ver}}"
         repository_url: "http://172.31.40.187:8081/repository/ansible_rep/"
-        username: "{{ username}}"
-        password: "{{ password }}"
+        username: admin
+        password: Supersaiyan@1
         dest: "/opt/tomcat/webapps/myweb-{{ver}}.war"
         mode: '0644'
