@@ -1,0 +1,23 @@
+---
+- hosts: server
+  become: True
+  vars_files:
+    - password.yaml
+  tasks:
+    - name: "Install PIP"
+      apt: name=python3-pip state=present
+
+    - name: "Install lxml"
+      pip: name=lxml
+
+    - name: "pulling  war file from nexus and deploying"
+      maven_artifact:
+        group_id: in.javahome
+        artifact_id: myweb
+        extension: war
+        version: 2.0.0
+        repository_url: "http://172.31.40.187:8081/repository/ansible_rep/"
+        username: "{{ username}}"
+        password: "{{ password }}"
+        dest: "/opt/tomcat/webapps/myweb-2.0.0.war"
+        mode: '0644'
