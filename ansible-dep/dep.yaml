@@ -15,9 +15,9 @@
         group_id: in.javahome
         artifact_id: myweb
         extension: war
-        version: "{{version}}"
+        version: "{{ver}}"
         repository_url: "http://172.31.40.187:8081/repository/ansible_rep/"
         username: "{{ username}}"
         password: "{{ password }}"
-        dest: "/opt/tomcat/webapps/myweb-{{version}}.war"
+        dest: "/opt/tomcat/webapps/myweb-{{ver}}.war"
         mode: '0644'
