@@ -1,0 +1,36 @@
+pipeline
+
+{
+    agent any
+     environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    
+    stages{
+        stage("git"){
+            steps{
+              git 'https://github.com/Vigneshkrishnan0001/my-app.git'
+            }
+        }
+        stage("maven build"){
+            steps{
+                sh "mvn clean package"
+            }
+        }
+        stage("upload in nexus"){
+            steps{
+               nexusArtifactUploader artifacts: [[
+                   artifactId: 'myweb',
+                   classifier: '', 
+                   file: 'target/myweb-2.0.0.war', 
+                   type: 'war']],
+                   credentialsId: 'nexus',
+                   groupId: 'in.javahome',
+                   nexusUrl: '172.31.40.187:8081',
+                   nexusVersion: 'nexus3', 
+                   protocol: 'http', repository: 'ansible_rep',
+                   version: '2.0.0' 
+            }
+        }
+    }
+}
