@@ -1,0 +1,13 @@
+---
+# tasks file for ec2
+ - name:  Launch the new EC2 Instance
+   amazon.aws.ec2_instance:
+     security_group: "{{ security_group }}"
+     instance_type: "{{ instance_type}}"
+     image_id: ami-068e3d6bc44010346
+     wait: true
+     region: "{{ region }}"
+     key_name: "{{ keypair }}"
+     count: "{{count}}"
+     tags:
+       Env: ansible-slave
