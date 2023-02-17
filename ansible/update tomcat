@@ -1,0 +1,44 @@
+---
+# tasks file for upgrade_tomcat
+    - name: Stop Tomcat on sever
+      systemd:
+        name: tomcat
+        state: stopped
+        daemon_reload: true
+
+    - name: Create a Tomcat Directory
+      file:
+        path: /opt/tomcat/apache-tomcat-{{ version }}
+        owner: tomcat
+        group: tomcat
+        mode: 755
+        recurse: yes
+ 
+    - name: download & unarchive tomcat 
+      unarchive:
+        src: "{{ src }}"
+        dest: /opt/tomcat/apache-tomcat-{{ version }}
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+ 
+    - name: Change ownership of tomcat directory
+      file:
+        path: /opt/tomcat/apache-tomcat-{{ version }}
+        owner: tomcat
+        group: tomcat
+        mode: "u+rwx,g+rx,o=rx"
+        recurse: yes
+        state: directory
+
+    - name:  changing the link 
+      file:
+        src: /opt/tomcat/apache-tomcat-{{ version }}
+        dest: /opt/tomcat/updated
+        state: link     
+        force: yes
+
+    - name: Start Tomcat on sever
+      systemd:
+        name: tomcat
+        state: started
+        daemon_reload: true
