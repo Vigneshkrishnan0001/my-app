@@ -1,0 +1,10 @@
+---
+ - name:  provisioning EC2 instances using Ansible
+   hosts: localhost
+   connection: local
+   gather_facts: False
+   become: true
+
+   roles:
+     - security-group
+     - ec2
