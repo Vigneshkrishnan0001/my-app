@@ -1,0 +1,8 @@
+---
+- name: Install Apache Tomcat9 using ansible
+  hosts: aws_ec2
+  remote_user: ubuntu
+  become: true
+
+  roles:
+    - tomcat
