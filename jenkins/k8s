@@ -1,0 +1,51 @@
+pipeline
+{
+    agent {
+  label 'kubernetes-slave'
+}
+environment{
+    PATH = "/opt/maven3/bin:$PATH"
+}
+
+    
+    stages{
+        stage("git checkout")
+        {
+            steps{
+                git 'https://github.com/Vigneshkrishnan0001/my-app.git'
+            }
+        }
+        stage("Maven Build")
+        {
+            steps{
+                sh "mvn clean package"
+            }
+        }
+        stage("Docker Build"){
+            steps{
+                
+              sh "sudo docker build . -t kakarot0503/my-app:0.0.3"
+              
+            }
+        }
+        stage("Push to dockerHub"){
+             steps{
+                 withCredentials([string(credentialsId: 'Docker-Hub', variable: 'DockerhubPwd')]) {
+                  sh "sudo docker login -u kakarot0503 -p ${DockerhubPwd}"
+                 
+                 }
+                 
+                 sh "sudo docker push kakarot0503/my-app:0.0.3"
+             }
+         }
+        stage("k8s deploy")
+        {
+            steps{
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8sconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+              sh " kubectl apply -f eks-dep.yaml "
+            }
+            }
+            
+        }
+    }
+}
