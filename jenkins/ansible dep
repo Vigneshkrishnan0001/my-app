@@ -1,1 +1,41 @@
+pipeline
+{
+    agent any
+    
+    stages{
+        
+         stage("git"){
+      steps{
+      git 'https://github.com/Vigneshkrishnan0001/my-app.git' 
+          }
+               }
+        
+        
+        stage("input")
+        {
+            
+                input {
+  message 'enter the version'
+  ok 'submit'
+  parameters {
+    string defaultValue: '1.0.0', name: 'version'
+             }
+                   }
+    steps{
+        script{
+        try {     
+            
+             ansiblePlaybook credentialsId: 'Login', disableHostKeyChecking: true, extras: '-e ver="${version}"',
+             installation: 'Ansible',
+             inventory: 'ansible-dep/inventory.yaml', 
+             playbook: 'ansible-dep/dep.yaml' 
+         }
+         catch (err) {
+             echo "version does not exists"
+         }
+        }
+    }
+    }
+    }
 
+}
