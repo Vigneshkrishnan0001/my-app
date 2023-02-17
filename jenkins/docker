@@ -1,0 +1,32 @@
+pipeline
+{
+    agent any
+    
+    environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    
+    stages{
+        stage("GitCheckout"){
+            steps{
+             git 'https://github.com/Vigneshkrishnan0001/my-app.git'   
+            }
+        }
+        stage("Maven Build")
+        {
+            steps{
+                sh "mvn clean package"
+            }
+        }
+        stage("Docker Build"){
+            steps{
+                
+              sh "docker build . -t kakarot0503/my-app:0.0.1"
+              // add if else condition
+              sh "docker stop tomcat-app"
+              sh "docker rm tomcat-app"
+              sh "docker run -d --name tomcat-app -p 9000:8080 kakarot0503/my-app:0.0.1"
+            }
+        }
+    }
+}
