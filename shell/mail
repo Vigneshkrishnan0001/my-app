@@ -1,0 +1,32 @@
+printf "Memory\t\tDisk\t\tCPU\n" > output.txt
+
+MEMORY=$(free -m | awk 'NR==2{printf "%.2f%%\t\t", $3*100/$2 }'| awk '{ print $1}' | cut -d'%' -f1 )
+DISK=$(df -h | awk '$NF=="/"{printf "%s\t\t", $5}'| awk '{ print $1}' | cut -d'%' -f1 )
+CPU=$(top -bn1 | grep load | awk '{printf "%.2f%%\t\t\n", $(NF-2)}'| awk '{ print $1}' | cut -d'%' -f1 )
+
+MEMORY=$( printf "%.0f" $MEMORY )
+DISK=$( printf "%.0f" $DISK )
+CPU=$( printf "%.0f" $CPU )
+
+if [ $MEMORY -ge $MV ]; then
+ mail -s 'Memory Alert' $MailID << EOF
+memory space Used: $MEMORY%
+EOF
+
+fi
+
+if [ $DISK -ge $DV ]; then
+    mail -s 'Disk Space Alert' $MailID << EOF
+Your root partition remaining free space is critically low. Used: $DISK%
+EOF
+
+fi
+
+if [ $CPU -ge $CV  ]; then
+  mail -s 'CPU Alert' $MailID << EOF
+ CPU Utilisation Used: $CPU%
+EOF
+
+fi
+
+printf "$MEMORY\t\t$DISK\t\t$CPU\n" >> output.txt
