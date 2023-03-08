@@ -1,0 +1,89 @@
+HdW8Q~XOG1k3daemNIZC_nmDGdoqs45-FUuphcYJ - service principle for azure 
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                          Devops:--
+
+Agile:
+Agile is a software development methodology that focuses on iterative, incremental, small, and 
+rapid releases of software, along with customer feedback. It addresses gaps and conflicts between the customer and developers.
+
+devops:
+DevOps is a culture that allows the development and the operations team to work together. 
+This results in continuous development, testing, integration, deployment, and monitoring of the software throughout the lifecycle.
+
+
+The major reasons to adopt DevOps are listed below:
+
+1>Faster innovations
+2>Shorter development cycles
+3>Reduced deployment failures
+4>Improved communication and collaboration
+5>More stable operating environments
+6>Increased efficiencies
+7>Reduced Costs and IT Headcount
+
+Technical benefits:
+1>Continuous software delivery
+2>Less complex problems to manage
+3>Early detection and faster correction of defects
+
+Business benefits:
+1>Faster delivery of features
+2>Stable operating environments
+3>Improved communication and collaboration between the teams
+
+Implementing devops to a project:
+Stage 1: assessment of the existing process and identify areas of improvement 
+Stage 2: Create a proof of concept (PoC).
+
+Devops key performance indicator:
+1> Meantime to failure recovery - This is the average time taken to recover from a failure.
+2> Deployment frequency - The frequency in which the deployment occurs.
+3> Percentage of failed deployments - The number of times the deployment fails.
+
+Git:
+1> creating branches /tags for new release 
+2> handling user accounts
+3> Backups
+4> Rollouts
+5> hooks
+6> Resetting password
+7> upgrading 
+
+Release type:
+1> major - 3 to 6 months
+2> minor - 2 weeks to 3 months
+3> Hotfix - 1 day to 2 weeks
+
+version : major.minor.hotfix.buildnumber
+
+in production: release version (1.0.0)
+
+
+Objective:
+1>A Proficient Devops Engineer, who actively collaborates with software developers, system operators and other IT staffmembers to manage project releases.
+
+Professional Summary
+1> 3+ years of experiance as a devops engineer in HCL
+2> Good knowledge in build tool - maven
+2> Work experiance in setting up and managing Infrastruce as a code (IAAC) using  Terraform 
+3> Work experiance in Configuration management using Ansible 
+4> Good hands on experiance in microservices like Kubernetes 
+5> Collaborate with team to setup development and operation process.
+6> Good hands-on knowledge in Jenkins Administration.
+7> Designing and implementing Continuous Integration & Continuous Delivery processes using build pipeline for Java application.
+8> Monitoring tools- Prometheus & Grafana 
+9> Good in troubleshooting and problem-solving skills
+10> Good in Linux Adiministartion
+
+Roles and Responsibility:
+1> creating private repository and handling Release and Branching activities in git hub
+2> creating master,slave configration and administration in jenkins
+3> Configuring Jenkins job with related Plugins for Testing, Artifactory, and Continuous Deployment to accomplish the complete CI / CD.
+4> Creating quality gates and failing the pipeline based on code analysis result by using sonar qube 
+5> Setting up private repository in Nexus 
+6> writing jenkins file using groovy 
+7> provisioning and managing infrastruce (azure Vms) as a code using Terraform
+8> writing playbook in Ansible  to automate repetitive tasks and quickly deploys critical applications
+9> 
+

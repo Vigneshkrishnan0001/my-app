@@ -1,0 +1,70 @@
+1)Git merge: 
+
+Adv:- logs are very exhaustive and can help in understanding the complete history of how and when each merge happened 
+      It is easy to find mistake and resolve them
+Dis:- Results in a clumsy log/histoy
+
+example: master branch has three commits 1,2,3 feature branch A,B -> git merge = 1,2,3,4(A,B)
+
+2)Git Rebase:
+
+Adv:- logs are linear
+ 	It is easy to move through projects
+
+Dis:- we cannot track, when and how the commits were merged on the target branch
+
+example: master branch has three commits 1,2,3 feature branch A,B -> git merge = 1,2,3,4(A),5(B)
+
+3)Git Checkout
+
+to discard changes in working area 
+example: git checkout file name 
+
+4)Git Reset
+
+to unstage file 
+example : git reset HEAD file name
+
+removing commited file in local repository
+exmample: git reset HEAD~1 -> moves to working area, removes  recent commit history 
+
+--soft - keeps the changes in staging area
+--mixed(default) - keeps changes in working area
+--Hard - changes are discarded 
+
+5)Git Revert
+
+to remove commit from remote repository,git log history wont be deleted  
+
+6)Git Reflog:
+
+example-to reover a deleted branch : 
+*git reflog
+*git checkout [sha]
+*git checkout -b [branchname]
+
+some of the sub-commands
+*git reflog --help
+*git reflog show
+*git reflog expire
+*git reflog delete
+*git reflog exists
+
+7)git fetch and pull
+
+fetch-if you want to see all the current branches and changes in remote repository,without adding to your local copy
+Pull- getting changes from remote repository and adding to your local copy
+
+8)to find list of files that has been changes in particular commit?
+
+Git show commit-id 
+
+9)discover if a branch is already merged or not?
+
+*git branch --merge master (lists branches merged in master)
+*git beanch --merge (list branches which are merged )
+*git branch --no-merge (list branches which are not merged)
+
+10) git cherry-pick
+
+if you want to pick a particular commit in a branch, we can use git cherry-pick commit-id

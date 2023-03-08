@@ -1,0 +1,17 @@
+pipeline  -kubernetes project
+
+prerequest:
+1> AKS cluster
+2> ACR creation
+3> az aks cluster name --attach acr name( attach the ACR with cluster)
+
+Build pipeline:(select agent )
+1> Maven-> give the pom.xml file path-> goals
+2> Build the image-> docker file location 
+3>Push to ACR
+4> Copy the deployment.yaml file in artifactory staging location
+5> Publish to artifactory Drop
+
+Release pipeline
+1>replace tokens (to dynamically give the image name with the build number )
+2> AKS cluster deployment 

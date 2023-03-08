@@ -1,0 +1,77 @@
+1)Downgrading a plugins
+
+jenkins--> manage jenkins--> manage plugins --> advance --> choose file in upload plugins 
+
+plugins.jenkins.io --> official path to download plugins
+
+2)User creation
+
+manage jenkins--> manage user-->create user
+
+permissions --> rollbased plugin, in configure global security -->authorization -->role based statergy 
+
+after doing the above step --> you will see Manage and assign Roles 
+
+Manage roles 
+Assign Roles 
+
+3)Deployment issues
+
+Username or password is not correct --> tomcat server, var/lib/tomcat/conf/users.xml 
+add --> <role rolename="manager-script"/>
+        <user username="tomcat" password="password" roles="manager-gui.manager-script"/>
+
+4) Reset jenkins Admin Password
+
+cd /var/lib/jenkins/  config.xml file  -(ubantu)
+change <userSecurity> as false
+restart jenkins service - sudo service jenkins restart 
+
+go to manage jenkins --> configure global security --> jenkins own user database 
+go to manage jenkins --> manage user --> change password 
+
+5) clean up workspace after build 
+
+manage plugins --> install - workspaceclean up plugin 
+post build action --> delete workspace when build is done 
+
+for pipeline 
+
+post{
+  always{
+     cleans()
+        }
+    }
+
+6) setup slave 
+
+copy the ssh id_rsa.pub information from master to slave machine 
+
+register:
+manage jenkins -> nodes and cloud  --> new node 
+
+remote root directory:
+lables:
+usage:
+launch method:
+
+
+7) jenkins to slack integration
+
+in slack:
+
+*create channel
+*settings--> add apps --> Jenkins CI --> add jenkins CI integration 
+
+in Jenkins:
+
+*manage plugins --> slack notification
+*manage jenkins--> configure system --> slack 
+
+workspace:
+credentials:
+channel name:
+
+freestyle job:
+post-build action : Slack notifiction 
+

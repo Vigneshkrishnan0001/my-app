@@ -1,0 +1,432 @@
+1)prereq for developer environment : node.js and text editor is required for react
+
+Create React app:
+
+npx create-react-app helloworld
+cd hellow-world
+npm start
+
+2)Folder Structure
+
+package.joson - dependencies 
+package-lock.json
+gitignore
+
+node_module - manage dependencies
+public - index.html
+src - index.js 
+      App.js - html displaced in browser
+      App.css -
+      App.test.js
+      index.css
+
+3)components(describe a part of the user interface )
+
+header, sidenav,main content, footer , root component(App)
+
+component code is placed in javaScript file
+
+type:
+Stateless functional component - javaScript functions
+
+Statefull Class - class extending component class, render method returning Html
+
+4)Functional component:
+
+properties(props)--> javascript function --> html(jsx)
+
+*Simple Functions
+*Use Func Component as much as possible
+*Absence of 'this' key wor
+*Solution without using state
+*Mainly reponsible for the UI
+*Stateless/dumb/Presentational
+
+
+
+example1:
+	import React from 'react'
+	const Greet = () => <h1>Hello who is this? </h1>
+	export default Greet
+example2:
+	import React from 'react'
+	function Reply()
+	{
+    return<h2>I am Kakarot</h2>
+	}
+	export default Reply
+
+5) Class component:
+
+*More feature rich
+*Maintain their own private data - state
+*complex UI logic
+*Provide life cycle hooks
+*Stateful/Smart/Container 
+
+
+example 1:
+	import React, { Component } from 'react'
+	class Welcome extends Component
+	{
+	render(){
+	return <h1>example for class component</h1>
+	}
+	}
+	export default Welcome 
+
+6) JSX
+
+javaScript XML - extension to java Script language syntax
+jsx makes your react code simpler and elegant
+
+without jsx:(pure react)
+
+return React.createElement('div', null ,React.createElement('h1',null,'withoutjsx'))
+
+7)Props
+
+Optional input, where component can accept
+
+example 1: using function 
+
+ 	import React from 'react'
+
+	const Reply =(props) =>
+	{
+    	console.log(props)
+    	return <h1> hello { props.name } example</h1>   
+	}
+	export default Reply
+
+in app.js:
+
+	function App() {
+  	return (
+    	<div className="App">
+     	<Greet />
+     	<Reply name ="props" />
+     	<Reply name ="props1" />
+     	<Welcome/>
+    	</div>
+  	);
+	}
+Component can be reused multiple times as shown above, with dynamic names usinng props(property)
+
+example 2: using class
+
+	import React, { Component } from 'react'
+	class Welcome extends Component
+	{
+	render(){
+	return <h1>example for {this.props.name} component</h1>
+	}
+	}
+	export default Welcome 
+
+
+8) props vs state:
+
+Props:
+*it get passed to the component
+*Function parameters
+*Props are immutable
+*props - Functional component
+ this.props - class component
+
+State:
+*it is managed within the component
+*Variables declared in the function body
+*State can be changed
+*useState Hook - Functional Component
+ This.state - Class Component
+
+9) state example:
+
+	import React, { Component } from 'react'
+
+	class Message extends Component
+	{
+	constructor()
+	{
+    	super()
+    	this.state = {
+        vikki: 'HI'
+    	}
+	}
+
+	Changemessage()
+	{
+    	this.setState({
+        vikki: 'Bye'
+    	})
+	}
+
+	render()
+	{
+	return(
+	<div>
+	<h1> { this.state.vikki } </h1>
+	<button onClick = {() =>  this.Changemessage() }> Subscribe </button>
+	</div>
+
+	) 
+	}
+
+10)ES7 React
+
+Add this extension for React
+
+commands:
+# rce - will build the class component structure 
+# rconst - will build constructor with state
+# rfce - React functional component export
+# rpce - React Pure component export
+
+11) Set state 
+
+* Always make use of setstate and never modify the state directly
+* Code has to be executed after the state has been updated? place the code in the call back function which is the second argument to the setState method
+	
+	this.setstate(
+	{
+	count: this.state.count +1
+	},
+	() => {
+	console.log('Callback value', this.state.count)
+	}
+
+* When you have to update state based on the previous state value, pass in a function as an argument instead of regular object.
+
+	this.setstate(prevState => ({
+	count: prevState.count +1
+	}))
+
+12)Destructing propsn and state 
+
+Syntax: 
+
+	render() {
+	const {name,heroname} = this.props
+	// const {state1, state2} = this.state // not used in this example 
+	return (
+	<h1> welcome {name} a.k.a {heroname} </h1>
+	)}}
+
+13) Binding Event Handlers
+
+Binding in the constructor is the best approach, reacommended in React Documents:
+
+ 	constructor(props){
+	super(props)
+	this.state ={
+	message: ' hello'
+	}
+	this.clickhandler = this.clickHandler.bind(this)
+	}
+	clickHandler(){
+	this.setState({	
+	message: 'Goodbye!!'
+	})
+	}
+
+	render(){
+	return(
+	<div>
+	<div> {this.state.message}</div>
+	<button onClick={this.clickHandler}> Click</button>
+	</div>)}
+
+14) methods as props 
+
+calling parent from child 
+
+in child .js:
+  	import React from 'react'
+	function Child(props) {
+  	return (
+    	<div>
+        <button onClick = { props.Handler}>Click</button>
+    	</div>
+  	)
+	}
+	export default Child
+
+in Parent.js:
+ 	import React, { Component } from 'react'
+	import Child from './Child'
+
+ 	class Parent extends Component {
+ 	constructor(props) {
+   	super(props)
+   	this.state = {
+      message: 'hello Parent'
+   	}
+	this.eventHandler = this.eventHandler.bind(this)
+ 	}
+
+	eventHandler()
+	{
+   	alert(`hello`)  
+    	}
+
+    	render() {
+    	return (
+      <div>
+        <Child Handler = {this.eventHandler} />
+      </div>
+    	)}}}
+
+	export default Parent
+
+16) Conditional Rendering 
+
+* If/else
+	import React, { Component } from 'react'
+
+ 	class Wishes extends Component {
+	constructor(props) {
+  	super(props)
+
+  	this.state = {
+     	isLoggedIn: false
+  	}
+	}
+
+
+  	render() {
+	if (this.state.isLoggedIn)
+	{ 
+    	return (<div>Happy birthday</div>)
+	}
+  	else {
+    	return (<div> Have a nice day </div>)
+  	} 
+  	}
+	}
+
+	export default Wishes
+
+
+*Element variables
+
+     	render() {
+ 	let message 
+ 	if(this.state.isLoggedIn)
+	{
+    	message = <div> Happy birthday</div>
+	}
+	else{
+    	message = <div>Have a nice day</div>
+	}
+
+	return <div> {message}</div>}
+
+* Ternary Conditional Operator 
+
+	return (this.state.isLoggedIn)?(<div>Happy birthday</div>):(<div>Have a nice day</div>)
+
+* Short Circuit operator
+
+     	return (this.state.isLoggedIn) && (<div>Happy Birthday</div>)
+
+17) List and keys
+
+* A "Key" is a special string attribute you need to include when creating lists of elements.
+* Keys give the element a stable identity
+* Keys help React identify hen items have changed, are added or are removed.
+* Help in efficient update of the user interface
+
+18) list (Maps)
+
+	function NameList(){
+	const names = ['Vikki','Goku','Kakarot']
+	const nameList = names.map( name => <h1 key ={name}> {name} </h2>)
+	return <div>{nameList} </div>}
+
+19) Index as key, when to use it
+
+* The items in your list do not have a uniqye id.
+* The list is a static list and will not change 
+* The list will never be reordered or filtered.
+
+	function NameList(){
+	const names = ['Vikki','Goku','Kakarot']
+	const nameList = names.map( (name,index )=> <h1 key ={index}> {name} </h2>)
+	return <div>{nameList} </div>}
+
+20) Basic form example:
+
+refer in github, file name : BasicForm.js
+
+21) Life cycle methods
+
+* Mounting :- When an instance of a component is being created and inserted into the DOM
+	types:1)constructor 
+		2) Static get DerivedStateFromProps
+		3)Render
+		4)componentDidMount
+
+* Updating :- When a component is being re-rendered as a result of change to either its props or state 
+	types:1) Static get DerivedStateFromProps
+		2)shouldComponentUpdate
+		3)render
+		4)getSnapshotBeforeUpdate
+		5)componentDidUpdate
+
+* Unmounting :- When a component is being removed from the DOM
+	types:1) ComponentWillUnmount
+
+* Error Handling :- When there is an erro during rendering, in a lifecycle method, or in the constructor of any child component.
+	types:1) static getDerivedFromError
+		2) componentDidCatch
+
+22) Mounting life cycle methods	
+
+
+#Constructor(props)
+
+* A special fumction that will get called whenever a new component is created
+* Initializing state
+* Binding the event handlers
+* Use Super(props) - Directly overwrite this.state
+* Do not cause side effects. example: HTTP requests
+
+#static getDerivedStateFromProps(props,state)
+
+* When the state of the component depends on changes on props over time
+* Set the state
+* Do not cause side effects. example: HTTP requests	
+
+#render()
+
+* Only required method in class
+* Read props & state and return JSX
+* Do not change state or interacct with DOM or make ajax calls
+* Children components lifecycle methhods are also executed 
+
+#componentDidMount
+
+* Invoked immediately after a component and all its children components have been rendered to the DOM
+* Cause Side effects. Example: Http request, interact with DOM or perform anny ajax calls to load data.
+
+
+23) Fragments 
+
+* group list of elements without adding extra node in DOM
+
+<div>
+ 	<div>
+	</div>
+</div> 
+when we insepct an element, to avoid this use frangments 
+
+	function FrangmentsDemo(){
+	return(
+	<React.Fragment>
+		<h1> Fragment Demo </h1>
+		<p> using fragment instead of div here</p>
+	</React.Fragment>
+	)
+
+24) Pure component - for class, memo - for function. learn these topics **

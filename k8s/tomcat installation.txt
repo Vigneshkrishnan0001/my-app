@@ -1,0 +1,47 @@
+1)install java
+
+sudo apt install default-jdk
+
+2)creating tomcat user and group(optional)
+
+sudo groupadd tomcat
+sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+
+3) download tomcat using wget 
+
+# Create tomcat directory
+cd /opt
+wget http://mirrors.fibergrid.in/apache/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz
+tar -xvzf /opt/apache-tomcat-<version>.tar.gz
+
+4) executing permission
+
+chmod +x /opt/apache-tomcat-<version>/bin/startup.sh 
+chmod +x /opt/apache-tomcat-<version>/bin/shutdown.sh
+
+5) create link for tomcat startup.sh and shutdown.sh
+
+ln -s /opt/apache-tomcat-<version>/bin/startup.sh /usr/local/bin/tomcatup
+ln -s /opt/apache-tomcat-<version>/bin/shutdown.sh /usr/local/bin/tomcatdown
+
+6)#search for context.xml
+find / -name context.xml
+
+/opt/tomcat/webapps/host-manager/META-INF/context.xml
+/opt/tomcat/webapps/manager/META-INF/context.xml
+
+comment out valueout line 
+
+restart --> tomcatdown -> tomcatup
+
+7) Update users information in the tomcat-users.xml file goto tomcat home directory and Add below users to conf/tomcat-users.xml file
+
+ <role rolename="manager-gui"/>
+ <role rolename="manager-script"/>
+ <role rolename="manager-jmx"/>
+ <role rolename="manager-status"/>
+ <user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+ <user username="deployer" password="deployer" roles="manager-script"/>
+ <user username="tomcat" password="s3cret" roles="manager-gui"/>
+
+restart --> tomcatdown -> tomcatup

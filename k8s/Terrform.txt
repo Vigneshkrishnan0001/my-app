@@ -1,0 +1,69 @@
+1) File provisioner 
+
+provisioner "file"{
+source =" "
+destination = ""
+}
+
+connection{
+type = "ssh"
+host = 
+user= ""
+password = ""
+privte_key = file("")
+}
+
+2) Local exec provisioner( to get private ip address of the vm created in azure and store it in txt file)
+
+provisioner "local-exec"{
+command = "echo ${self.private_ip}>> private.txt
+}
+
+No connection is required 
+
+3)Remote exec provisioner (used along with file prov)
+
+
+provisioner "remote-exec"{
+
+inline =[
+"sudo yum -y install nginx"
+"sudo systemctl start nginx"
+"sudo cp /tmp/index.html /user/share/nginx/html/index.html"
+]
+}
+
+connection{
+type = "ssh"
+host = 
+user= ""
+password = ""
+privte_key = file("")
+}
+
+
+4) workspace (for diffirent environment)
+
+*each workspace can have different set of variables
+*Single TF file can manage environments
+
+tf files looks like - terraform.tfstate.d/dev/terraform.tfstate
+
+terraform workspace - h --> help
+terraform workspace list - -> to list the workspace 
+terraform workspace new name --> to create workspace 
+terraform workspace show - -> to see the current  workspace 
+terraform workspace select name --> to switch 
+
+inside resource block{
+instance_type = lookup(var.instance_type,terraform.workspace)}
+
+variable {
+type= map
+
+default={
+default = "t3.micro"
+dev = " t3.laarge"
+prod = "t3.2xlarge"
+}
+

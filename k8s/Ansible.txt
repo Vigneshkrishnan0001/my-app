@@ -1,0 +1,22 @@
+Install Ansible 
+
+sudo apt-get update
+sudo apt install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible 
+
+
+On host machines
+
+sudo apt-get update
+sudo apt-get install python
+
+keyless authentication 
+
+on Master : ssh-keygen
+
+on slave : sudo nano  .ssh/authorized_keys
+
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtzHnfxwWBtkZTQWxcRJbijdyxfnHNkhBZrLYBgmHNma85MlRNm/n0haQZOvUXlAFX1zsHQNuZ6H+k6RuOnvCrJKSjuwFvGWPQ0v2G0M0KuROtZ3ewSoiqXDgrnc8U4Nm0fv1fzccd/+PZHpTSmFP0SfF7cAccTKCH407q3AE17ReBxLKRdVquOcpQXiZ7NNP6KwphAaClHVz2a2aWlnG0bSRTK/HzSdFFg0vtbvft4tffad36IXa9Rwok6zEshVWJyWlUzc0eKGCiwBEX8twG9lv67xFsSvYA4Tp2FOGnJveJtoaxP1OoXGdQ9+KijJnGpHaB2RKbHTK5/kI6LI6pOQZKtj+hfxEB7KdQwDVOuEWF5OZtt3fqsY2RtuM88K8SFQxnJLL1FiBDNr2lGKIDdy8WVnvIyKhC5Oq6kAOiWjOpN2K1F6hLct7JvLnhDmDTy6j6FNNe4j8i2YKrnxLP+rHhYf7twJlGE1Xfvgm8OejOwhGooUhoaz3aDjy3hvs= ubuntu@ip-172-31-12-174

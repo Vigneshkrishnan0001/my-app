@@ -1,0 +1,360 @@
+1)Role based access control:
+
+1> private key for user --> openssl genrsa -out user.key 2048
+2> certificate signing request --> openssl req -new -key user.key -out user.csr -subj "/CN=user/0=namespace"
+3> Sign in master and get the ca.crt, ca.key from etc/kubernetes/pki
+4> certificate--> openssl x509 -req -in user.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out user.crt -days 365
+
+5> create kube-config file for user
+required files --> ca.crt, user.crt, user.key
+
+#cmd--> kubectl --kubeconfig user.kubeconfig config set-cluster clustername --server https://ipaddress --certificate-authority=ca.crt
+#cmd--> kubectl --kubeconfig user.kubeconfig comfig set-credentials user --client-certificate path/user.crt --client-key path/user.key
+#cmd--> kubectl --kubeconfig user.kubecomfig config set-context user-clustername --cluster clustername --namespace namespacename --user user
+
+6> role and rolebinding
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "jane" to read pods in the "default" namespace.
+# You need to already have a Role named "pod-reader" in that namespace.
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+# You can specify more than one "subject"
+- kind: User
+  name: jane # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: pod-reader # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+
+
+2)Liveness and Readiness Probe:
+
+Liveness - health chcek
+Readiness - Send Traffic
+
+Methods- Httpget, exec command, Tcpsocket
+required parameter : Successthreshold, failurethreshold,initialdelayseconds,periodsSeconds
+
+HttpGet:
+  path:
+  port:Liveness-port
+  failureThreshold: 1
+  periodSeconds: 10
+
+
+exec:
+  command:
+  -cat
+  -/tmp/vikki
+  initialDelayseconds: 5
+  periodSeconds: 10
+
+tcpSocket:
+  Port:8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+
+3)Security Context:
+ - privilage or access control setting for a Pod or container 
+
+spec:
+ securitycontext:
+  runasuser:2000
+  fsgroup:3000
+ container:
+
+Note: etc/passwd to see the pid number for user and group
+
+4)config Maps 
+purpose ( to decouple something - eg database )
+
+through files and folder,literal values and volume mount.
+
+to view: kubectl get configmap name -o yaml
+
+environment:-
+spec:
+  container
+  -name:
+  env:
+    -name:
+    valuefrom:
+      ConfigMapKeyRef:
+        name:
+        key:
+
+volume:-
+volumemoount:
+  name:abc
+  mountpath:
+volume:
+  -name:abc
+   configMap
+     name:
+
+5)Secrets
+
+-to store sensitive information, by default it stores it as unencrypted base 64 string(encode)
+types:
+*opaquearbitary  ----> user-define data
+*kubernetes.io/service-account
+*kubernetes.io/dockercfg
+*kubernetes.io/dockercfgjson
+*kubernetes.io/basic-auth -----> basic credentials
+*kubernetes.io/ssh-auth
+*kubernetes.io/tls
+
+
+apiversion:v1
+kind:secret
+metadata:
+  name:mysecret
+  type:kubernetes.io/basic-auth
+Stringdata:
+  user:
+  password:
+  
+  
+
+#command to encode --> echo name | base64
+#command to encode --> echo name | base64 --decode
+
+environment:-
+spec:
+  container
+  -name:
+  env:
+    -name:
+    valuefrom:
+      SecretKeyRef:
+        name:
+        key:
+
+
+6)PV and PVC
+
+to get pod id or uid  ---> kubectl get pod name -o yaml (or) kubectl get pod name -o jasonpath= {.metadata.uid}
+location --> /var/lib/kubelet/pods
+
+apiversion: v1
+kind: persistentVolume
+metadata:
+ name:
+Spec:
+  StorageClassName:
+  Capacity:
+    Storage: 1Gi
+  Accessmode: 
+    -Readwriteonce,readwritemany,readonlymany,writeonlymany
+  hostpath:
+    Path:
+
+apiversion: v1
+kind: persistentVolumeClaim
+metadata:
+ name:
+Spec:
+  StorageClassName:
+  Accessmode: 
+    -Readwriteonce,readwritemany,readonlymany,writeonlymany
+  resources:
+    request:
+      Storage: 512Mi
+
+attaching pvc to pod
+
+spec:
+  container
+  -name:
+  volumemount:
+    name:abc
+    mountpath:
+  volume:
+    name:abc
+    Persistentvolumeclaim:
+      ClaimName:
+
+7) Annotations:
+
+Assume : 3 containers running in a pod 
+Kubectl get logs pod name , gives an error 
+Soln: Kubectl get logs pod name -c container name --> to display the log of a specific container 
+*to set a default container we use annotation
+
+syntax:
+under metadata add the annotation 
+
+metadata:
+  name:
+  annotation:
+    Kubectl.kubernetes.io/default-container: container name
+
+
+8) Jobs(example data seeding to mysql pod)
+
+Dataseeding - process of populating a database with initial set of datas
+
+why not?
+* manual - logging to pod and use git clone to download table.sql and then execute table.sql(queres) command  - no permission
+* Init container - will execute before application container - in this case need to be done after pod creation
+
+apiversion: batch/v1
+Kind: Job
+metadata:
+  name:
+specs:
+  ttlsecondsafterfiished: 10
+  Template:
+    metadata:
+      name:
+  specs:
+    -container:
+       name:
+       image: with git and mysql client installed 
+       command:
+         - 'bash'
+         - '-c'
+         - git clone
+           mysql connection to pod and create a database
+           mysql connection to pod and execute the table.sql in database 
+
+   restartpolicy: Onfailure
+
+
+9)Headless service
+
+it is used for statefull appilcation.(database)
+it gets replicated in all the pods. if changes made in one pod all the pods will have the information
+syntax: 
+
+specs:
+  clusterIp: None 
+
+10) Pod Affinity and Anti Affinity
+
+Spec: 
+  Affinity:
+    podAntiAffinity:
+      requiredDuringScedulingIgnoreDuringExecution:
+       -labelSelector:
+         matchExpression:
+          -Key: app
+           operator: In
+           Values:
+             -store
+       topologyKey: "Kubernetes.io/hostname"
+
+
+explanantion:Not going to schedule in node which has a pod with the matchexpression.
+
+Spec: 
+  Affinity:
+    podAffinity:
+      requiredDuringScedulingIgnoreDuringExecution:
+       -labelSelector:
+         matchExpression:
+          -Key: app
+           operator: In
+           Values:
+             -store
+       topologyKey: "Kubernetes.io/hostname"
+
+explanantion:going to schedule in node which has a pod with the matchexpression.
+
+Note: topologyKey - key of node labels, scheduler tries to place balance number of pods into each topology
+types:
+topologyKey: "Kubernetes.io/hostname"
+topologyKey: "Kubernetes.io/os"
+topologyKey: "Kubernetes.io/arch"
+topologyKey: "Kubernetes.io/region" --> cloud
+topologyKey: "Kubernetes.io/Zone" --> cloud
+
+11) Network Policy:-
+
+apiversion: networking.k8s.io/vi
+kind: NeyworkPolicy
+metadata:
+  name:
+  namespace:
+Spec:
+  podSelector:
+    matchLables:
+      rle: DB
+  PolicyTypes:
+   -Ingress
+   -Egress
+  ingress:
+   -from:
+     -ipBlock:
+        cidr: 10.0.0.1/16
+        expect:
+         -10.1.0.0/24
+    -namespaceSelector:
+       matchLables:
+         project: myproject
+    -podSelector:
+       matchLables:
+         role: frontend
+
+   ports:
+    -protocol:TCP
+     port: 8080
+
+egress:
+ -to:
+   -ipblock:
+
+
+Selectors type:
+podselector
+namespaceSelector
+podselector and namespaceSelector
+IpBlock
+
+12)Horizontal Pod AutoScaler
+
+based on CPU utilization
+
+commandline: kubectl autoscale deploymemt app --cpu-percent=50  --min 1 --max 10
+
+apiVersion: autoscaling/vi
+kind: HorizontalPodAutoscaler
+metadata:
+spec:
+ maxrepicas: 10
+ minrepicas: 1
+ scallerTargetRef:
+  apiversion: apps/v1
+  kind: Deployment
+  name: app
+ targetCPUUtilizationPercentage: 50
+
+13) Pod Disruption budget
+minimum pod should be available during voluntry destruction or maintenance 
+
+apiVersion: policy/v1beta
+kind: PodDisruptionBudget
+metadata:
+  name:
+spec: 
+  minAvailable: 2
+selector:
+  matchLables:
+    run: nginx
